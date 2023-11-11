@@ -1,5 +1,11 @@
 <script>
-    const g_users = <% - typeof users !== "undefined" ? JSON.stringify(users) : "[]"; %>;
+    const g_users = <%- typeof users !== "undefined" ? JSON.stringify(users) : "[]"; %>;
+    const g_documents = <%- typeof documents !== "undefined" ? JSON.stringify(documents) : "[]"; %>;
+    const g_detail_documents = <%- typeof detail_documents !== "undefined" ? JSON.stringify(detail_documents) : "[]"; %>;
+    const g_stocks = <%- typeof stocks !== "undefined" ? JSON.stringify(stocks) : "[]"; %>;
+    const g_products = <%- typeof products !== "undefined" ? JSON.stringify(products) : "[]"; %>;
+    const g_detail_receipts = <%- typeof detail_receipts !== "undefined" ? JSON.stringify(detail_receipts) : "[]"; %>;
+    const g_receipts = <%- typeof receipts !== "undefined" ? JSON.stringify(receipts) : "[]"; %>;
 </script>
 <!doctype html>
 <html lang="en">
@@ -15,7 +21,7 @@
         }
 
         .h-custom {
-            height: calc(100% - 73px);
+            height: calc(100% - 100px);
         }
 
         @media (max-width: 450px) {
@@ -24,120 +30,361 @@
             }
         }
 
+        body {
+            background-color: #0093E9;
+            background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+        }
+
         .item {
             display: flex;
         }
-    </style>
 
-    <body class="d-flex justify-content-center">
-        <section class="vh-100" style="width: 1240px;">
+        .item .key {
+            font-weight: bold;
+        }
+
+        th {
+            text-align: center;
+        }
+
+        #table-footer th span {
+            font-weight: 400;
+            font-style: italic;
+            width: 100%;
+        }
+
+        #table-footer th {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+       
+        header {
+            display: flex;
+            justify-content: end;
+            margin-right: 50px;
+        }
+        .modal-backdrop {
+            opacity:0.5 !important;
+        }
+
+        #table-products tbody tr td, #table-products tbody tr th {
+            vertical-align: middle;
+        }
+    </style>
+    <body class="d-flex justify-content-center overflow-x-hidden flex-wrap flex-column">
+        <div class="d-flex align-items-center" style="width: 100%; height: 100%;">
             <div class="container-fluid h-custom">
-                <div class="row d-flex justify-content-center align-items-center h-100">
-                    <div class="col-md-12 col-lg-12 col-xl-5">
+                <div class="row d-flex justify-content-center align-items-center h-100 gap-6">
+                    <div style="height: 100%;" class="col-md-8 col-lg-6 col-xl-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <form>
+                                    <!-- <div class="form-outline mb-4">
+                                        <label class="form-label" for="form3Example3">Đăng sử dụng tài khoản</label>
+                                        <select id="option-users" class="form-select"
+                                            aria-label="Default select example">
+                                            <option selected>Open this select menu</option>
+                                            <% users.forEach(user=>{ %>
+                                                <option value=<%=user.user_id %>><%= user.username %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
+                                    </div> -->
+                                    <div class="form-outline mb-4 d-flex align-items-center justify-content-between">
+                                        <label class="form-label" for="form3Example3">
+                                            Đăng sử dụng tài khoản : <span><b class="username"></b></span>
+                                        </label>
+                                        <button id="btn-logout" class="btn btn-link">Đăng xuất</button>
+                                    </div>
+                                    <div class="form-outline mb-4 d-flex align-items-center justify-content-between">
+                                        <label class="form-label" for="">
+                                            Phiếu nhập cho chứng từ : <span><b class="document_string"></b></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-outline mb-4 d-flex align-items-center justify-content-between">
+                                        <label class="form-label" for="">
+                                            Kho : <span><b class="stock_name"></b></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-outline mb-4 d-flex align-items-center justify-content-between">
+                                        <label class="form-label" for="">
+                                            Thủ kho : <span><b class="stocker_name"></b></span>
+                                        </label>
+                                    </div>
+                                     <div class="form-outline mb-4">
+                                        <label class="form-label" for="driver">Người giao hàng</label>
+                                        <select id="option-drivers" class="form-select"
+                                            aria-label="Default select example">
+                                            <option selected>Open this select menu</option>
+                                            <% users.filter(user => user.role == 'driver').forEach(user=>{ %>
+                                                <option value=<%=user.user_id %>><%= user.username %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label" for="accountant">Kế toán trưởng</label>
+                                        <select id="option-accountants" class="form-select"
+                                            aria-label="Default select example">
+                                            <option selected>Open this select menu</option>
+                                            <% users.filter(user => user.role == 'accountant').forEach(user=>{ %>
+                                                <option value=<%=user.user_id %>><%= user.username %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
+                                    </div>
+                                    <button type="button" id="btn-show-modal" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        Xác nhận sản phẩm và số lượng
+                                      </button>
+                                      
+                                 
+                                    <div class="text-center text-lg-start mt-4 pt-2">
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-primary" type="button" id="btn-save-receipt">Lưu lại</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height: 100%;" class="col-md-12 col-lg-12 col-xl-6">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col">
                                         <div class="item">
-                                            <div class="key">Đơn vị</div>
-                                            <div class="value">...</div>
+                                            <div class="key">Đơn vị: </div>
+                                            <div class="value" id="work_unit">...</div>
                                         </div>
                                         <div class="item">
-                                            <div class="key">Bộ phận</div>
-                                            <div class="value">...</div>
+                                            <div class="key">Bộ phận: </div>
+                                            <div class="value" id="department">...</div>
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <p>Mẫu số 01 -VT</p>
-                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
+                                        <p class="text-center" style="font-weight: bold;">Mẫu số 01 -VT</p>
+                                        <p class="text-center" style="font-weight: bold;">(Ban hành theo Thông tư số
+                                            200/2014/TT-BTC <br> Ngày 22/12/2014 của Bộ Tài chính)</p>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="">
                                     <h3 class="text-center">PHIẾU NHẬP KHO</h3>
-                                    <p class="text-center" id="date">Ngày tháng năm</p>
-                                    <div class="item justify-content-center">
-                                        <div class="key">Số</div>
-                                        <div class="value">...</div>
-                                    </div>
+                                    <table style="width: 100%;">
+                                        <tbody>
+                                            <tr class="d-flex justify-content-around">
+                                                <td style="flex:1">
+
+                                                </td>
+                                                <td style="flex:1">
+                                                    <p class="text-center date_string"></p>
+                                                    <div class="item justify-content-center">
+                                                        <div class="key">Số</div>
+                                                        <div class="value" id="receipt_id">...</div>
+                                                    </div>
+                                                </td>
+                                                <td style="flex:1">
+                                                    <div class="item justify-content-center">
+                                                        <div class="key">Nợ: </div>
+                                                        <div class="value" id="depbt">...</div>
+                                                    </div>
+                                                    <div class="item justify-content-center" style="flex-wrap: nowrap;">
+                                                        <div class="key">Có: </div>
+                                                        <div class="value" id="balance">...</div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <div class="row">
                                     <div class="item">
-                                        - 
+                                        -
                                         <div class="key">Họ và tên người giao: </div>
-                                        <div class="value">...</div>
+                                        <div class="value driver_name">...</div>
                                     </div>
                                     <div class="item">
-                                        - 
+                                        -
                                         <div class="key">Theo: </div>
-                                        <div class="value">...</div>
+                                        <div class="value document_string">...</div>
                                     </div>
                                     <div class="item">
-                                        - 
+                                        -
                                         <div class="key">Nhập tại kho: </div>
-                                        <div class="value">...</div>
+                                        <div class="value stock_name" >...</div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="">
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                              <th scope="col">STT</th>
-                                              <th scope="col">First</th>
-                                              <th scope="col">Last</th>
-                                              <th scope="col">Handle</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr>
-                                              <th scope="row">1</th>
-                                              <td>Mark</td>
-                                              <td>Otto</td>
-                                              <td>@mdo</td>
+                                                <th rowspan="2">STT</th>
+                                                <th rowspan="2">Tên</th>
+                                                <th rowspan="2">ID</th>
+                                                <th rowspan="2">Đơn vị tính</th>
+                                                <th colspan="2">Số lượng</th>
+                                                <th rowspan="2">Đơn giá</th>
+                                                <th rowspan="2">Thành tiền</th>
                                             </tr>
                                             <tr>
-                                              <th scope="row">2</th>
-                                              <td>Jacob</td>
-                                              <td>Thornton</td>
-                                              <td>@fat</td>
+                                                <th>Theo chứng từ</th>
+                                                <th>Thực nhập</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-document-products">
+                                            <tr>
+                                                <td>A</td>
+                                                <td>B</td>
+                                                <td>C</td>
+                                                <td>D</td>
+                                                <td>1</td>
+                                                <td>2</td>
+                                                <td>3</td>
+                                                <td>4</td>
                                             </tr>
                                             <tr>
-                                              <th scope="row">3</th>
-                                              <td colspan="2">Larry the Bird</td>
-                                              <td>@twitter</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
                                             </tr>
-                                          </tbody>
-                                      </table>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td>Cộng</td>
+                                                <td>x</td>
+                                                <td>x</td>
+                                                <td>x</td>
+                                                <td>x</td>
+                                                <td>x</td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="item">
+                                    -
+                                    <div class="key">Tổng số tiền (viết bằng chữ):</div>
+                                    <div class="value" id="total_string">...</div>
+                                </div>
+                                <div class="item">
+                                    -
+                                    <div class="key">Số chứng từ gốc:</div>
+                                    <div class="value" id="document_id">...</div>
+                                </div>
+                                <p class="text-end date_string"></p>
+                                <div class="row">
+                                    <table id="table-footer">
+                                        <thead>
+                                            <tr class="d-flex gap-3">
+                                                <th>
+                                                    Người lập phiếu
+                                                    <br>
+                                                    <span>(Ký, họ tên)</span>
+                                                    <br>
+                                                    <span class="fw-bold username"></span>
+                                                </th>
+                                                <th>
+                                                    Người giao hàng
+                                                    <br>
+                                                    <span>(Ký, họ tên)</span>
+                                                    <br>
+                                                    <span class="fw-bold driver_name"></span>
+                                                </th>
+                                                <th>
+                                                    Thủ kho
+                                                    <br>
+                                                    <span>(Ký, họ tên)</span>
+                                                    <br>
+                                                    <span class="fw-bold stocker_name" id=""></span>
+
+                                                </th>
+                                                <th>
+                                                    Kế toán trưởng
+                                                    <br>
+                                                    <span>(Hoặc bộ phận có nhu cầu nhập)</span>
+                                                    <br>
+                                                    <span>(Ký, họ tên)
+                                                    </span>
+                                                    <br>
+                                                    <span class="fw-bold" id="accountant_name"></span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                        <form>
-
-                            <!-- Email input -->
-                            <div class="form-outline mb-4">
-                                <label class="form-label" for="form3Example3">Đăng nhập với tài khoản</label>
-                                <select id="option-users" class="form-select" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <% users.forEach(user=>{ %>
-                                        <option value=<%=user.user_id %>><%= user.username %>
-                                        </option>
-                                        <% }) %>
-                                </select>
-                            </div>
-                            <div class="text-center text-lg-start mt-4 pt-2">
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-primary" type="button" id="btn-login">Đăng nhập</button>
-                                </div>
-                                <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!"
-                                        class="link-danger">Register</a></p>
-                            </div>
-
-                        </form>
-                    </div>
+                   
                 </div>
             </div>
-        </section>
+            </section>
+                 <!-- Modal -->
+                 <div class="modal fade" id="modalGroups" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-card card">
+                                <div class="card-header">
+                                    <h3 class="card-header-title">
+                                        Xác nhận sản phẩm và số lượng
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="table-products" class="table table-responsive table-borderless">
+                                            
+                                          <thead>
+                                            <tr class="bg-light">
+                                              <th scope="col" width="20%" class="text-start">Tên sản phẩm</th>
+                                              <th scope="col" width="10%" class="text-start">Gía nhập</th>
+                                              <th scope="col" width="20%" class="text-start">Số lượng chứng từ</th>
+                                              <th scope="col" width="20%" class="text-start">Số lượng thực tế</th>
+                                              <th scope="col" class="text-end" width="10%"><span>Tiền</span></th>
+                                            </tr>
+                                          </thead>
+                                      <tbody id="tbody-products">
+                                        <tr>
+                                          <td class="align-middle">Fan circleua NJ23</td>
+                                          <td>200000</td>
+                                          <td>20</td>
+                                          <td>
+                                            <input type="number" class="form-control" value="20">
+                                          </td>
+                                          <td class="text-end"><span class="fw-bolder">$0.99</span> <i class="fa fa-ellipsis-h  ms-2"></i></td>
+                                        </tr>
+                                       
+                                      </tbody>
+                                    </table>
+                                      
+                                      </div>
+                                </div>
+                                <div class="card-footer d-flex justify-content-end gap-2" style="overflow: hidden;">
+                                    <button class="float-right btn btn-secondary"
+                                            data-dismiss="modal" id="btn-cancel">Hủy</button>
+                                    <button id="btn-save" class="float-right delete-item-yes btn btn-primary"
+                                            style="margin-right: .25rem;"><i class="fe fe-check-circle"></i> Lưu
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
     </body>
     <%- include('partials/footer', {scripts: ['/assets/js/inventory.js']}); -%>
 

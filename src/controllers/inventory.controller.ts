@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
-import { DetailWarehouseModel, DocumentModel, UserModel, WareHouseReceiptModel } from "../models";
+import { DetailDocumentModel, DetailWarehouseModel, DocumentModel, ProductModel, StockModel, UserModel, WareHouseReceiptModel } from "../models";
 
 class InvertoryController {
     async index(req: Request, res: Response) {
         try {
             const userNormals = await UserModel.findAll({ where: { role: 'normal' } });
-            res.render('login', { users: userNormals })
+            const documents = await DocumentModel.findAll({ where: { status: 'pending' } });
+            
+            res.render('login', { users: userNormals, documents })
         } catch (error) {
             console.error('Error:', error);
             res.status(500).json({ error: 'Internal Server Error' });
@@ -13,8 +15,17 @@ class InvertoryController {
     }
     async create(req: Request, res: Response) {
         try {
-            const userNormals = await UserModel.findAll({ where: { role: 'normal' } });
-            res.render('inventory', { users: userNormals })
+            const [users, documents, detail_documents, stocks, products, detail_receipts, receipts] = await Promise.all([
+                UserModel.findAll(),
+                DocumentModel.findAll(),
+                DetailDocumentModel.findAll(),
+                StockModel.findAll(),
+                ProductModel.findAll(),
+                DetailWarehouseModel.findAll(),
+                WareHouseReceiptModel.findAll(),
+            ]);
+
+            res.render('inventory', { users, documents, detail_documents, stocks, products, detail_receipts, receipts });
         } catch (error) {
             console.error('Error:', error);
             res.status(500).json({ error: 'Internal Server Error' });
