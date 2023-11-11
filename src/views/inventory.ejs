@@ -1,64 +1,144 @@
 <script>
-    const g_users = <%- typeof users !== "undefined" ? JSON.stringify(users) : "[]"; %>;
+    const g_users = <% - typeof users !== "undefined" ? JSON.stringify(users) : "[]"; %>;
 </script>
 <!doctype html>
 <html lang="en">
 
 <%- include('partials/header'); -%>
-<style>
-    .divider:after,
-    .divider:before {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: #eee;
-    }
-
-    .h-custom {
-        height: calc(100% - 73px);
-    }
-
-    @media (max-width: 450px) {
-        .h-custom {
-            height: 100%;
+    <style>
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
         }
-    }
-</style>
-<body class="d-flex justify-content-center">
-    <section class="vh-100" style="width: 1240px;">
-        <div class="container-fluid h-custom">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-md-9 col-lg-6 col-xl-5">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                        class="img-fluid" alt="Sample image">
-                </div>
-                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                    <form>
 
-                        <!-- Email input -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="form3Example3">Đăng nhập với tài khoản</label>
-                            <select id="option-users" class="form-select" aria-label="Default select example">
-                                <option selected>Open this select menu</option>
-                                <% users.forEach(user=>{ %>
-                                    <option value=<%=user.user_id %>><%= user.username %>
-                                    </option>
-                                    <% }) %>
-                            </select>
-                        </div>
-                        <div class="text-center text-lg-start mt-4 pt-2">
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-primary" type="button" id="btn-login">Đăng nhập</button>
+        .h-custom {
+            height: calc(100% - 73px);
+        }
+
+        @media (max-width: 450px) {
+            .h-custom {
+                height: 100%;
+            }
+        }
+
+        .item {
+            display: flex;
+        }
+    </style>
+
+    <body class="d-flex justify-content-center">
+        <section class="vh-100" style="width: 1240px;">
+            <div class="container-fluid h-custom">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-md-12 col-lg-12 col-xl-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="item">
+                                            <div class="key">Đơn vị</div>
+                                            <div class="value">...</div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="key">Bộ phận</div>
+                                            <div class="value">...</div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <p>Mẫu số 01 -VT</p>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <h3 class="text-center">PHIẾU NHẬP KHO</h3>
+                                    <p class="text-center" id="date">Ngày tháng năm</p>
+                                    <div class="item justify-content-center">
+                                        <div class="key">Số</div>
+                                        <div class="value">...</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="item">
+                                        - 
+                                        <div class="key">Họ và tên người giao: </div>
+                                        <div class="value">...</div>
+                                    </div>
+                                    <div class="item">
+                                        - 
+                                        <div class="key">Theo: </div>
+                                        <div class="value">...</div>
+                                    </div>
+                                    <div class="item">
+                                        - 
+                                        <div class="key">Nhập tại kho: </div>
+                                        <div class="value">...</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                              <th scope="col">STT</th>
+                                              <th scope="col">First</th>
+                                              <th scope="col">Last</th>
+                                              <th scope="col">Handle</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <th scope="row">1</th>
+                                              <td>Mark</td>
+                                              <td>Otto</td>
+                                              <td>@mdo</td>
+                                            </tr>
+                                            <tr>
+                                              <th scope="row">2</th>
+                                              <td>Jacob</td>
+                                              <td>Thornton</td>
+                                              <td>@fat</td>
+                                            </tr>
+                                            <tr>
+                                              <th scope="row">3</th>
+                                              <td colspan="2">Larry the Bird</td>
+                                              <td>@twitter</td>
+                                            </tr>
+                                          </tbody>
+                                      </table>
+                                </div>
                             </div>
-                            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!"
-                                    class="link-danger">Register</a></p>
                         </div>
+                    </div>
+                    <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                        <form>
 
-                    </form>
+                            <!-- Email input -->
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="form3Example3">Đăng nhập với tài khoản</label>
+                                <select id="option-users" class="form-select" aria-label="Default select example">
+                                    <option selected>Open this select menu</option>
+                                    <% users.forEach(user=>{ %>
+                                        <option value=<%=user.user_id %>><%= user.username %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="text-center text-lg-start mt-4 pt-2">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-primary" type="button" id="btn-login">Đăng nhập</button>
+                                </div>
+                                <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!"
+                                        class="link-danger">Register</a></p>
+                            </div>
+
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-</body>
-<%- include('partials/footer', {scripts: ['/assets/js/inventory.js']}); -%>
+        </section>
+    </body>
+    <%- include('partials/footer', {scripts: ['/assets/js/inventory.js']}); -%>
+
 </html>
