@@ -50,7 +50,7 @@ Cấu hình database môi trường development tại file /src/config/db.config
 }
 ```
 # Lưu ý: Đã có tính năng Create database if not exists nên không cần tạo database bằng tay trước
-Cài đặt dependencies và devDependencies sau đó start server.
+Cài đặt dependencies và devDependencies sau đó start server. (http://localhost:3000/login)
 
 ```sh
 yarn
@@ -66,6 +66,7 @@ NODE_ENV=production yarn start-dev
 
 ## Giao diện
 #_Lựa chọn người dùng và yêu cầu nhập đơn cần thực hiện_ (có thể phát triển tính năng đăng nhập)
+http://localhost:3000/login
 ![alt](https://github.com/nguyendinhphongdx/interview_vimes_inventory/blob/master/public/resources/img/login.png?raw=true)
 #_Giao diện đơn nhập kho_
 ![alt](https://github.com/nguyendinhphongdx/interview_vimes_inventory/blob/master/public/resources/img/inventory.png?raw=true)
