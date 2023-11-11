@@ -68,7 +68,7 @@ NODE_ENV=production yarn start-dev
 #_Lựa chọn người dùng và yêu cầu nhập đơn cần thực hiện_ (có thể phát triển tính năng đăng nhập)
 http://localhost:3000/login
 ![alt](https://github.com/nguyendinhphongdx/interview_vimes_inventory/blob/master/public/resources/img/login.png?raw=true)
-#_Giao diện đơn nhập kho_
+#_Thiết kế và thực hiện code giao diện đơn nhập kho và preview đơn_
 ![alt](https://github.com/nguyendinhphongdx/interview_vimes_inventory/blob/master/public/resources/img/inventory.png?raw=true)
 #_Giao diện chỉnh sửa số lượng thực nhận_
 ![alt](https://github.com/nguyendinhphongdx/interview_vimes_inventory/blob/master/public/resources/img/edit-product.png?raw=true)
