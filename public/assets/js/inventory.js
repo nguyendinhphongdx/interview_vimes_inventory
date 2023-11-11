@@ -325,6 +325,7 @@ const formatCurrency = (number) => {
 
 const save = async () => {
     try {
+        $('#btn-save-receipt').prop('disabled', true);
         const { accoutant, document, driver, currentUser, products } = state;
         if (!accoutant?.user_id) throw new Error('Invalid accoutant');
         if (!document?.document_id) throw new Error('Invalid document');
@@ -345,9 +346,12 @@ const save = async () => {
 
         const result = await axios.post('/api/inventory/create', body);
         toastr.success('create successfully');
+        await new Promise(r => setTimeout(r, 3000));
+        window.location.href = '/login';
     } catch (error) {
         toastr.error(error.message);
+    } finally {
+        $('#btn-save-receipt').prop('disabled', false);
     }
-
 
 }

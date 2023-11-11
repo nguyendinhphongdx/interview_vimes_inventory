@@ -60,7 +60,7 @@ class InvertoryController {
                 };
             });
             const createdDetails = DetailWarehouseModel.bulkCreate(details);
-            await DocumentModel.update({ status: 'completed' }, { where: { stock_id: Document.document_id } });
+            const updated = await DocumentModel.update({ status: 'completed' }, { where: { document_id: Document.document_id } });
             return res.json({ message: 'created', data: createdDetails });
         } catch (error: any) {
             console.error('Error:', error);
